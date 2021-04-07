@@ -14,9 +14,7 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-        $result = Product::all()->where("name",$request->get("name"));
+        $result = Product::all()->where("product_name",$request->get("name"));
         return $result ?  response()->json(['Answer' => 'Ok','search' => $result],200):  response()->json(['Answer' => 'Failed'],401);
     }
-
-
 }
