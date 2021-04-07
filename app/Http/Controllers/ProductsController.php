@@ -13,6 +13,9 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
         $products = Product::all();
+        foreach ($products as $product ) {
+            $product->front_image='http://localhost:8000'.$product->front_image;
+        }
         return response()->json(['products' => $products],200);
     }
 

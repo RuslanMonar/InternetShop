@@ -22,11 +22,11 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'product_name' => 'Xiaomi Mi 11 8/256GB Horizon Blue',
-            'price' => 26999,
-            'quantity' => 5,
-            'rating' => 4.6,
-            'front_image' => 'https://i.allo.ua/media/catalog/product/cache/1/image/710x600/602f0fa2c1f0d1ba5e241f914e856ff9/x/i/xiaomi_mi_11_horizon_blue_1_1.jpg'
+            'product_name' => 'Xiaomi Redmi Note 9 Pro 6/128GB Interstellar Grey',
+            'price' => 7799,
+            'quantity' => 100,
+            'rating' => 3,
+            'front_image' => '/uploads/XiaomiRedmiNote9Pro6128GbInterstellarGrey.jpg'
         ];
     }
 }
