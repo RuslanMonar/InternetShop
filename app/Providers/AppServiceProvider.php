@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'Phone' => \App\Models\Phone::class,
+            'Laptop' => \App\Models\Laptop::class,
         ]);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Phone;
+use App\Models\Laptop;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 
-class ProductPhoneSeeder extends Seeder
+class ProductLaptopSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +16,7 @@ class ProductPhoneSeeder extends Seeder
     public function run()
     {
         Product::factory(1)->for(
-            Phone::factory(),
+            Laptop::factory(),
             'productable'
         )->create();
     }

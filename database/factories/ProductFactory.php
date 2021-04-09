@@ -22,11 +22,11 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'product_name' => 'Xiaomi Redmi Note 9 Pro 6/128GB Interstellar Grey',
-            'price' => 7799,
-            'quantity' => 100,
-            'rating' => 3,
-            'front_image' => '/uploads/XiaomiRedmiNote9Pro6128GbInterstellarGrey.jpg'
+            'product_name' => 'Планшет Samsung Galaxy Tab A7 10.4" LTE(SM-T505NZSASEK) Silver',
+            'price' => 6799,
+            'quantity' => 40,
+            'rating' => 0,
+            'front_image' => '/uploads/samsung_galaxy_tab_a7_10.4_wifi_sm-t500nzsasek_silver_3_1.jpg'
         ];
     }
 }
@@ -43,10 +43,27 @@ class ProductFactory extends Factory
 
 
 //-------------------------------
-// return [
+//          return [
 //             'product_name' => 'Apple iPhone 12 Pro Max 256GB Pacific Blue (MGDF3)',
 //             'price' => 44999,
 //             'quantity' => 120,
 //             'rating' => 4.5,
 //             'front_image' => 'https://i.allo.ua/media/catalog/product/cache/1/image/710x600/602f0fa2c1f0d1ba5e241f914e856ff9/i/p/iphone-12-pro-max-blue-hero_4.jpg'
 //         ];
+//-------------------------------
+// return [
+//     'product_name' => 'Xiaomi Redmi Note 9 Pro 6/128GB Interstellar Grey',
+//     'price' => 7799,
+//     'quantity' => 100,
+//     'rating' => 3,
+//     'front_image' => '/uploads/XiaomiRedmiNote9Pro6128GbInterstellarGrey.jpg'
+// ];
+
+//-----------------------------------
+// return [
+//     'product_name' => 'Ноутбук Mi RedmiBook 13 i5/8/512/MX250/W',
+//     'price' => 20399,
+//     'quantity' => 20,
+//     'rating' => 0,
+//     'front_image' => '/uploads/mi_redmibook_13_1.jpg'
+// ];
