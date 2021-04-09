@@ -22,11 +22,12 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'product_name' => 'Планшет Samsung Galaxy Tab A7 10.4" LTE(SM-T505NZSASEK) Silver',
-            'price' => 6799,
-            'quantity' => 40,
+            'product_name' => 'Ноутбук Mi RedmiBook 13 i5/8/512/MX250/W',
+            'price' => 20399,
+            'quantity' => 20,
             'rating' => 0,
-            'front_image' => '/uploads/samsung_galaxy_tab_a7_10.4_wifi_sm-t500nzsasek_silver_3_1.jpg'
+            'front_image' => '/uploads/mi_redmibook_13_1.jpg',
+            'manufacturer' => 'Xiaomi'
         ];
     }
 }
