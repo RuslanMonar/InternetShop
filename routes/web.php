@@ -3,7 +3,10 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
+use Illuminate\Database\Eloquent\Casts\ArrayObject;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
