@@ -96,6 +96,7 @@ class ProductsController extends Controller
 
     public function FormatArrayOfObjects($productsArrays)
     {
+        $products = [];
         foreach ($productsArrays as $key => $value) {
             foreach ($value as $key2 => $value2) {
                 $products[] = $value2;
@@ -132,17 +133,43 @@ class ProductsController extends Controller
 
     public function FindByFilter(Request $request)
     {
-        $query = Phone::select();
+
+        $type = $request->get('type');
+        $type = 'App\Models\\' . $type;
+        $query = $type::select();
         $items = $request->get('filterParams');
+
         foreach ($items as $key => $value) {
-            foreach ($value as $val => $prop) {
-                $query->whereIn($key, $value);
-            }
+            $query->where(function ($query) use ($value,$key){
+                foreach ($value as $val => $prop) {
+                    if($key !== 'lower_price'  && $key !== 'higher_price' && $key !== 'manufacturer'){
+                        if(is_array($value) &&  isset($value[0]) && $value[0] == 'Interval'){
+                                $query->OrwhereBetween($key,[$prop[0] , $prop[1]]);                      
+                        }
+                        else{
+                            $query->whereIn($key, $value);
+                        }
+                    }
+                }
+            });
         }
+
+
         $CurrentProducts = $query->get();
+        $productsArrays = [];
+
         foreach ($CurrentProducts as $key => $value) {
-            $productsArrays[] = Product::where('productable_id', $value->id)->where('productable_type', 'Phone')->get();
+            $product = Product::select();
+            $product->where('productable_id', $value->id)
+            ->where('productable_type', 'Phone')
+            ->where('price','>=',$items['lower_price'][0])
+            ->where('price','<=',$items['higher_price'][0]);
+            if(!empty($items['manufacturer'])){
+                $product->whereIn('manufacturer',$items['manufacturer']);
+            }
+           $productsArrays[] =  $product->get();
         }
+
         $products = $this->FormatArrayOfObjects($productsArrays);
         $products = $this->EditImgPath($products);
         $price = $this->MinMaxPrice($products);
