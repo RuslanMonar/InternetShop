@@ -133,10 +133,10 @@ class ProductsController extends Controller
 
     public function FindByFilter(Request $request)
     {
-
+        DB::connection()->enableQueryLog();
         $type = $request->get('type');
-        $type = 'App\Models\\' . $type;
-        $query = $type::select();
+        $typeWithNameSpace = 'App\Models\\' . $type;
+        $query = $typeWithNameSpace::select();
         $items = $request->get('filterParams');
 
         foreach ($items as $key => $value) {
@@ -144,9 +144,24 @@ class ProductsController extends Controller
                 foreach ($value as $val => $prop) {
                     if($key !== 'lower_price'  && $key !== 'higher_price' && $key !== 'manufacturer'){
                         if(is_array($value) &&  isset($value[0]) && $value[0] == 'Interval'){
+                            if(is_array($prop)){
                                 $query->OrwhereBetween($key,[$prop[0] , $prop[1]]);                      
+                            }
+                            elseif (is_numeric($prop)) {
+                                $query->OrwhereIn($key, [$prop]);
+                            }
+                        }
+                        elseif (is_array($value) &&  isset($value[0]) && $value[0] == 'likeSearch') {
+                                foreach ($value as $data) {
+                                    if($data !== 'likeSearch'){
+                                        $query->Orwhere($key,"=",$data)->Orwhere($key, 'LIKE', "{$data}%");
+                                 }
+                             }
                         }
                         else{
+                            // foreach ($value as $data) {
+                            //      $query->where($key,"=",$data)->Orwhere($key, 'LIKE', "{$data}%");
+                            // }
                             $query->whereIn($key, $value);
                         }
                     }
@@ -154,14 +169,15 @@ class ProductsController extends Controller
             });
         }
 
-
+        
         $CurrentProducts = $query->get();
+        //return response()->json(['products' => DB::getQueryLog()], 200);
         $productsArrays = [];
 
         foreach ($CurrentProducts as $key => $value) {
             $product = Product::select();
             $product->where('productable_id', $value->id)
-            ->where('productable_type', 'Phone')
+            ->where('productable_type', $type)
             ->where('price','>=',$items['lower_price'][0])
             ->where('price','<=',$items['higher_price'][0]);
             if(!empty($items['manufacturer'])){
