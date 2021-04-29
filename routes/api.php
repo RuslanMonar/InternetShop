@@ -16,3 +16,5 @@ Route::post('/search',[SearchController::class,'search']);
 Route::post('/products',[ProductsController::class,'index']);
 Route::post('/category',[ProductsController::class,'FindByCategory']);
 Route::post('/filter',[ProductsController::class,'FindByFilter']);
+
+Route::middleware('auth:sanctum')->get('/cart_add',[CartController::class,'addToCart']);
