@@ -42,5 +42,8 @@ class Cart extends Model
     {
         $this->products()->sync($product_id);
     }
-    
+    public function deleteProduct()
+    {
+        $this->products()->detach();
+    }
 }
