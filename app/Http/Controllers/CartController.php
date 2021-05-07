@@ -82,7 +82,24 @@ class CartController extends Controller
 		if($quantity > 0) $cart->quantity = $quantity;
 		$cart->total_price = $cart->products[0]->price * $cart->quantity;
 		$cart->save();
-		//return response()->json(['quantity' => $request->get('quantity')], 200);
+	}
+	public function CountProductInCart()
+	{
+		$user_id = $user_id = Auth::user()->id;  
+
+    	//Array with id of order Items which has user [1 ,2 ,4 , 12 ...]
+    	$quantity_total = 0;
+		$quantity = DB::table('cart')
+		->select('quantity')
+		->where('user_id' , $user_id)
+		->get()
+		->map(function($cart) {
+			return $cart->quantity;
+		})->toArray();
+		foreach ($quantity as $val) {
+			$quantity_total += $val;
+		}
+		return response()->json(['quantity' => $quantity_total], 200);
 	}
 }
 
