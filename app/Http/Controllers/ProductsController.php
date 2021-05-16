@@ -16,7 +16,7 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
-        $products = Product::all();
+        $products = Product::paginate(15);
         // $types = $product_types = Relation::morphMap();
         // $types = array_keys($types);
         // foreach ($types as $key => $value) {
@@ -64,7 +64,7 @@ class ProductsController extends Controller
     {
         $productClass = $request->get('name');
         $productClass = 'App\Models\\' . $productClass;
-        $products = Product::whereHasMorph('productable', $productClass)->with('productable')->get();
+        $products = Product::whereHasMorph('productable', $productClass)->with('productable')->paginate(12);
         $price = $this->MinMaxPrice($products);
         $products = $this->EditImgPath($products);
         return response()->json(['products' => $products, 'price' => $price], 200);
@@ -99,9 +99,22 @@ class ProductsController extends Controller
         $products = [];
         foreach ($productsArrays as $key => $value) {
             foreach ($value as $key2 => $value2) {
-                $products[] = $value2;
+                    $products[] = $value2;
+                }
             }
-        }
+        return $products;
+    }
+
+
+    public function FormatArrayOfObjectsPagination($productsArrays)
+    {
+        $products = [];
+        foreach ($productsArrays as $key => $value) {
+            foreach ($value as $key2 => $value2) {
+                    $products[] = $value;
+                    
+                }
+            }
         return $products;
     }
 
@@ -169,7 +182,8 @@ class ProductsController extends Controller
             });
         }
 
-        
+
+
         $CurrentProducts = $query->get();
         //return response()->json(['products' => DB::getQueryLog()], 200);
         $productsArrays = [];
@@ -186,9 +200,27 @@ class ProductsController extends Controller
            $productsArrays[] =  $product->get();
         }
 
+
         $products = $this->FormatArrayOfObjects($productsArrays);
+
+        $perPage = 12;
+        $page = $request->get('pagination');
+        $offset = $perPage * ($page - 1);
+        $countedProducts = count($products);
+
+        if($offset+$perPage > $countedProducts || $offset+$perPage < $countedProducts) {
+            $limit = $countedProducts;
+        }
+        else{
+            $limit = $offset+$perPage;
+        }
+
+        $products = array_slice($products, $offset , $limit);
+        
         $products = $this->EditImgPath($products);
         $price = $this->MinMaxPrice($products);
-        return response()->json(['products' => $products,'price'=>$price], 200);
+        $products = new \Illuminate\Pagination\LengthAwarePaginator($products, $countedProducts, $perPage, $page , ['path'=>'api/filter']);
+        
+        return response()->json(['products' => $products ], 200);
     }
 }
