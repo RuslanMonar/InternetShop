@@ -15,7 +15,6 @@ class CreateLaptopTable extends Migration
     {
         Schema::create('laptops', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('manufacturer');
             $table->float('screen_diagonal');
             $table->string('screen_resolution');
             $table->integer('screen_refresh_frequency');
