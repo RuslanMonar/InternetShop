@@ -29,35 +29,25 @@ class ProductsController extends Controller
     }
 
 
-    public function create()
+    public function ProductDetails(Request $request)
     {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(Product $product)
-    {
-        //
-    }
-
-    public function edit(Product $product)
-    {
-        //
-    }
+        $id = $request->get('id');
+        $productable_id = $request->get('productable_id');
+        $productable_type = $request->get('productable_type');
+        $productable_type_namespace  = 'App\Models\\' . $request->get('productable_type');
 
 
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
+        $product = Product::where('id',$id)->FirstOrFail();
 
-    public function destroy(Product $product)
-    {
-        //
+        $images = $product->images()->orderBy('id')->get();
+
+        $productDetails = $productable_type_namespace::where('id',$productable_id)->get();
+
+        foreach ($images as $item) {
+            $item->path_image = 'http://localhost:8000' . $item->path_image;
+        }
+        return response()->json(['product' => $product , 'images' => $images , 'productDetails' => $productDetails], 200);
+      
     }
 
     public function FindByCategory(Request $request)
@@ -68,6 +58,23 @@ class ProductsController extends Controller
         $price = $this->MinMaxPrice($products);
         $products = $this->EditImgPath($products);
         return response()->json(['products' => $products, 'price' => $price], 200);
+    }
+
+    public function RecomendedProducts(Request $request)
+    {
+        $id = $request->get('id');
+        $start_price = $request->get('start_price');
+        $end_price = $request->get('end_price');
+        $productable_type = $request->get('productable_type');
+
+        $products = Product::where('price', '>=', $start_price)
+        ->where('price', '<=', $end_price)
+        ->where('productable_type' , $productable_type)
+        ->where('id','!=' , $id)
+        ->limit(5)->get();
+
+        $products = $this->EditImgPath($products);
+        return response()->json(['products' => $products], 200);
     }
 
     public function MinMaxPrice($products){
@@ -106,43 +113,6 @@ class ProductsController extends Controller
     }
 
 
-    public function FormatArrayOfObjectsPagination($productsArrays)
-    {
-        $products = [];
-        foreach ($productsArrays as $key => $value) {
-            foreach ($value as $key2 => $value2) {
-                    $products[] = $value;
-                    
-                }
-            }
-        return $products;
-    }
-
-    // public function FindByFilter(Request $request)
-    // {
-    //     $currentProduct = Phone::all();
-    //     $products = [];
-    //     $extra = [];
-    //     $items = $request->get('filterParams');
-        // foreach ($items as $key => $value) {
-        //     foreach ($value as $val => $prop) {
-    //             foreach ($currentProduct as $product => $productVal) {
-    //                 if (!in_array($productVal[$key],$value)) {
-    //                     unset($currentProduct[$product]);
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     //$products = [];
-    //     foreach ($currentProduct as $key => $value) {
-    //         $products[] = Product::where('productable_id', $value->id)->where('productable_type', 'Phone')->get();
-    //     }
-    //     foreach ($products as $key => $value) {
-    //         $value = $this->EditImgPath($value);
-    //     }
-    //     return response()->json(['products' => $products], 200);
-    // }
 
     public function FindByFilter(Request $request)
     {

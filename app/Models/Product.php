@@ -31,4 +31,9 @@ class Product extends Model
         $product->fill($fields);
         return $product;
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class , 'product_id' , 'id');
+    }
 }

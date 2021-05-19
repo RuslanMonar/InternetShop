@@ -28,3 +28,5 @@ Route::middleware('auth:sanctum')->post('/change-quantity-value',[CartController
 
 Route::middleware('auth:sanctum')->post('/count-products-in-cart',[CartController::class,'CountProductInCart']);
 
+Route::post('/product-details',[ProductsController::class,'ProductDetails']);
+Route::post('/recomended-products',[ProductsController::class,'RecomendedProducts']);
