@@ -60,6 +60,23 @@ class ProductsController extends Controller
         return response()->json(['products' => $products, 'price' => $price], 200);
     }
 
+    public function RecomendedProducts(Request $request)
+    {
+        $id = $request->get('id');
+        $start_price = $request->get('start_price');
+        $end_price = $request->get('end_price');
+        $productable_type = $request->get('productable_type');
+
+        $products = Product::where('price', '>=', $start_price)
+        ->where('price', '<=', $end_price)
+        ->where('productable_type' , $productable_type)
+        ->where('id','!=' , $id)
+        ->limit(5)->get();
+
+        $products = $this->EditImgPath($products);
+        return response()->json(['products' => $products], 200);
+    }
+
     public function MinMaxPrice($products){
         $price = [
             'lowerPrice' => 1000000000000,
