@@ -30,3 +30,6 @@ Route::middleware('auth:sanctum')->post('/count-products-in-cart',[CartControlle
 
 Route::post('/product-details',[ProductsController::class,'ProductDetails']);
 Route::post('/recomended-products',[ProductsController::class,'RecomendedProducts']);
+Route::post('/popular-products',[ProductsController::class,'GetPopularProducts']);
+
+
