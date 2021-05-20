@@ -77,6 +77,15 @@ class ProductsController extends Controller
         return response()->json(['products' => $products], 200);
     }
 
+    public function GetPopularProducts(Request $request)
+    {
+        $products = Product::orderBy('rating' ,'desc')
+        ->limit(4)->get();
+
+        $products = $this->EditImgPath($products);
+        return response()->json(['products' => $products], 200);
+    }
+
     public function MinMaxPrice($products){
         $price = [
             'lowerPrice' => 1000000000000,
